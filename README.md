@@ -19,7 +19,7 @@
 
 # kafka-offset-consumer
 
-Stat consumer group commit metadata from [Apache Kafka&trade;](http://kafka.apache.org) internal topic `__consumer_offsets`
+Stat consumer group commit from [Apache Kafka&trade;](http://kafka.apache.org) internal topic `__consumer_offsets`
 
 ## Building project
 
