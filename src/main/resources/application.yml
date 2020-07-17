@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: consumer-offset-demo
+
+bootstrap.servers: localhost:9092
+group.id: group_consumer_offset
+receive.topic: __consumer_offsets
