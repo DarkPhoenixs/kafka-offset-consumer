@@ -36,6 +36,7 @@ public class KafkaConsumerRunner implements Runnable {
     private final KafkaConsumer consumer;
     private final String topic;
     private ConcurrentMap<String, AtomicInteger> count = new ConcurrentHashMap<>();
+    private volatile long startTime, stopTime;
 
     public KafkaConsumerRunner(Properties props, String topic) {
         this.consumer = new KafkaConsumer(props);
@@ -45,6 +46,7 @@ public class KafkaConsumerRunner implements Runnable {
     public void run() {
         try {
             consumer.subscribe(Arrays.asList(topic));
+            startTime = System.currentTimeMillis();
             while (!closed.get()) {
                 ConsumerRecords<byte[], byte[]> records = consumer.poll(Duration.ofMillis(1000));
                 for (ConsumerRecord<byte[], byte[]> record : records) {
@@ -89,10 +91,13 @@ public class KafkaConsumerRunner implements Runnable {
         }
 
         System.out.println("-------------------");
+        System.out.println("acquisition time: " + (stopTime - startTime) / 1000 + " s.");
+        System.out.println("-------------------");
     }
 
     // Shutdown hook which can be called from a separate thread
     public void shutdown() {
+        stopTime = System.currentTimeMillis();
         print();
         closed.set(true);
         consumer.wakeup();
